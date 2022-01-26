@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Routes , Route } from 'react-router-dom'
+import About from './comps/About';
+import Cards from './comps/Cards';
+import Header from './comps/Header';
 
-function App() {
+
+
+export default function App({data}) {
+  const [all, setAll] = useState([])
+  
+  useEffect(() => {
+    (async () => {
+      const api = await fetch('https://forbes400.herokuapp.com/api/forbes400/?limit=50')
+      const data = await api.json()
+     
+    setAll(data)
+    console.log(data)
+     
+    })()
+}, []); 
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Router>
+    <div>
+     <Header all={all} setAll={setAll} />
+      <Routes>
+        <Route path="/" element={<Cards all={all} setAll={setAll}/>}/>
+        <Route path="/home" element={<Cards all={all} setAll={setAll}/>}/>
+
+      </Routes>
+
     </div>
-  );
+      </Router>
+  )
 }
 
-export default App;
+
+
